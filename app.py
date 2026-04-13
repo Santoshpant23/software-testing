@@ -13,6 +13,8 @@ class Testing:
             if f not in self.relationship:
                 self.relationship[f] = []
             self.relationship[f].append(t)
+            if t not in self.relationship:
+                self.relationship[t] = []
     
     def get_relationship(self):
         print(self.relationship)
@@ -82,11 +84,12 @@ class Testing:
     def return_paths(self):
         print(self.simple_paths, "<-- Simple Paths")
         print(self.prime_paths, "<-- Prime Paths")
+        print("summary: total simple paths: ", len(self.simple_paths), " total prime paths: ", len(self.prime_paths))
         return
         
 
 
-test = Testing([[1, 2], [2, 3], [2, 4], [4, 5], [5, 2]])
+test = Testing([[1, 2], [1, 5], [2, 6], [2, 3], [4, 2], [3, 4], [6, 7], [5, 5], [5, 7]])
 test.get_relationship()
 test.find_paths()
 test.return_paths()
