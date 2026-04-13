@@ -45,8 +45,13 @@ class Testing:
                     can_extend = True
                     self.dfs_simple_paths(neighbor, current_path, visited.copy())
                 else:
-                    # this is loop, must be prime path
-                    self.prime_paths.append(current_path+str(neighbor))
+                    # this is loop, must be prime path (if this matches the first element)
+                    # print(neighbor, " is the neighbour and ", current_path, " is the path", current_path[0], " is the first index")
+                    if str(neighbor) == current_path[0]:
+                        # print("Inner loop worked")
+                        # although they are not simple technically but they are loops, so we will regardless put them in simple loops
+                        self.simple_paths.append(current_path+str(neighbor))
+                        # self.prime_paths.append(current_path+str(neighbor))
             
             # If we can't extend further, this is an ending path
     
@@ -58,6 +63,7 @@ class Testing:
         # now check if any given is subset of any other, else this is a prime path
         for i in range(len(self.simple_paths)):
             curr = self.simple_paths[i]
+            print("checking for ", curr)
             found = False
             for j in range(len(self.simple_paths)):
                 inner = self.simple_paths[j]
