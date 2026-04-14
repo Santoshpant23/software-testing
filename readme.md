@@ -7,3 +7,4 @@ Test Cases:
 4) [[Init,Node],[Node,Node],[Node,Node],[Node,Loop]]-> 
         Traversal of cycle (2,3,4,2),(3,4,2,3),(4,2,3,4)
 5) [[Init,node],[node,node],[node,term]]-> 5,5* (cycle)
+
