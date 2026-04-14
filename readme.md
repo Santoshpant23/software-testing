@@ -57,7 +57,16 @@ ADD HERE
 [>1,1,N,>0,1]
 [>1,>1,N,>0,>1]
 
+#Kacy Part
 
+1) [1,1,N,>0,>1] : [[INIT, N1], [N2, TERM]]
+2) [1,1,N,>0,>1] : [[INIT, N1], [N1, N2], [N3, TERM]] -> Error
+3) [>1,1,N,>0,>1] : [[INIT, N1], [INIT, N2], [N1, TERM]] (this is because N2 cant come to TERM)
+4) [1,0,S,>0,1] : [[INIT, N], [N, N]] (self-loop but without termination)
+5) [1,0,C,>0,>1]: [[INIT, N1], [N1, N2], [N2, N1]] -> Error (Cycle but without term
+6) [[INIT, N], [N, N]] -> Error (Infinite Self Loop)
+7) [[INIT, A], [A, B], [C, D], [D, C]] -> Error (It is so disconnected I would say and without term)
+   
 
 
 
