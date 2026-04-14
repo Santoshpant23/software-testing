@@ -42,8 +42,12 @@ If Node = 1, Init == 0 || Init == 1
 
 Lists:
 ADD HERE
-[Empty List] 1)
+[Empty List] 1) => Error
 [I,T,L,E,N]  
 [1,1,N,0,1]  2) [[INIT, N],[N, TERM]]
-[         ]  3)
+[1,1,S,>0,1]  3) [[INIT, N],[N,N] [N, TERM]]
+[1,1,C,>0,>1] 4) [[INIT, N1],[N1,N2],[N2,N3],[N3,N4],[N4,N2],[N2, TERM]]
+[0,0,S,>0,1]  5)[[N,N]] => Error
+[1,1,C,>0,>1] 6)[[INIT, N1],[N1,N5],[N5,N5],[N5,N7],[N7,TERM]] - Duplicate
+
 
