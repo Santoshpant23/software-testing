@@ -42,3 +42,8 @@ If Node = 1, Init == 0 || Init == 1
 
 Lists:
 ADD HERE
+[Empty List] 1)
+[I,T,L,E,N]  
+[1,1,N,0,1]  2) [[INIT, N],[N, TERM]]
+[         ]  3)
+
