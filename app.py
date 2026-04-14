@@ -1,3 +1,4 @@
+
 class Testing:
     def __init__(self, edges) -> None:
         self.edges = edges
@@ -37,14 +38,14 @@ class Testing:
         current_path += str(node)
         visited.add(node)
         
-        self.simple_paths.append(current_path)
         # If node has no outgoing edges, it's a complete path
         if node not in self.relationship or not self.relationship[node]:
+            self.simple_paths.append(current_path+"!")
             return
         else:
+            self.simple_paths.append(current_path)
             for neighbor in self.relationship[node]:
                 if neighbor not in visited:
-                    can_extend = True
                     self.dfs_simple_paths(neighbor, current_path, visited.copy())
                 else:
                     # this is loop, must be prime path (if this matches the first element)
@@ -52,31 +53,39 @@ class Testing:
                     if str(neighbor) == current_path[0]:
                         # print("Inner loop worked")
                         # although they are not simple technically but they are loops, so we will regardless put them in simple loops
-                        self.simple_paths.append(current_path+str(neighbor))
+                        self.simple_paths.append(current_path+str(neighbor)+"*")
                         # self.prime_paths.append(current_path+str(neighbor))
+                    else:
+                        # self.simple_paths.append(current_path+"!")
+                        if str(neighbor) != current_path[-1]:
+                            self.simple_paths[-1] = current_path + "!"
+                            # self.simple_paths.append()
             
             # If we can't extend further, this is an ending path
     
     def find_prime_paths(self):
-        # Remove duplicates from simple_paths + the subsets, that is it :)
-        unique_simple_paths = list(set(self.simple_paths))
-        
-        # cycle is already handled in simple paths:
-        # now check if any given is subset of any other, else this is a prime path
-        for i in range(len(self.simple_paths)):
-            curr = self.simple_paths[i]
-            print("checking for ", curr)
+        for sp in self.simple_paths:
+            if sp[-1]=="*":
+                self.prime_paths.append(sp)
+        terminating  = []
+        for path in self.simple_paths:
+            if path[-1]=="!":
+                terminating.append(path)
+        # print(terminatings)
+        for i in range(len(terminating)):
+            curr = terminating[i][:len(terminating[i])-1]
             found = False
-            for j in range(len(self.simple_paths)):
-                inner = self.simple_paths[j]
-                if i != j and len(curr) < len(inner):
-                    # now only check for subset
-                    if inner.find(curr)!=-1:
-                        # curr is a subset, so we just exit the loop
+            for j in range(len(terminating)):
+                # print("checking ")
+                check = terminating[j][:len(terminating[j])-1]
+                if i!=j and len(curr) < len(check):
+                    if check.find(curr)!=-1:
                         found = True
                         break
             if not found:
-                self.prime_paths.append(curr)
+                self.prime_paths.append(curr+"!")      
+
+        # pass
 
 
 
@@ -89,7 +98,9 @@ class Testing:
         
 
 
-test = Testing([[1, 2], [1, 5], [2, 6], [2, 3], [4, 2], [3, 4], [6, 7], [5, 5], [5, 7]])
+# test = Testing([[1, 2], [1, 5], [2, 6], [2, 3], [4, 2], [3, 4], [6, 7], [5, 5], [5, 7]])
+test = Testing([[1, 2], [2, 4], [4, 5], [5, 2], [2, 3]])
 test.get_relationship()
 test.find_paths()
 test.return_paths()
+# print("157".find("15"))
