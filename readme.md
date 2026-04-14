@@ -56,6 +56,16 @@ ADD HERE
 
 [1,1,C,>0,>1] 6)[[INIT, N1],[N1,N5],[N5,N5],[N5,N7],[N7,TERM]] - Duplicate  
 
+#Kacy's part:
+
+[1,1,N,>0,>1] : [[INIT, N1], [N2, TERM]]
+[1,1,N,>0,>1] : [[INIT, N1], [N1, N2], [N3, TERM]] -> Error
+[>1,1,N,>0,>1] : [[INIT, N1], [INIT, N2], [N1, TERM]] (this is because N2 cant come to TERM)
+[1,0,S,>0,1] : [[INIT, N], [N, N]] (self-loop but without termination)
+[1,0,C,>0,>1]: [[INIT, N1], [N1, N2], [N2, N1]] -> Error (Cycle but without term
+[[INIT, N], [N, N]] -> Error (Infinite Self Loop)
+[[INIT, A], [A, B], [C, D], [D, C]] -> Error (It is so disconnected I would say and without term)
+
 [>1, 1, N, >0, >1]  7) [[INIT, N1], [N1, N3], [INIT, N2], [N2, N3], [N3, TERM]]  
 
 [1, >1, N, >0, >1]   8)  [[INIT, N1], [N1, N2], [N2, N4], [N1, N3], [N3, TERM], [N4, TERM]]
