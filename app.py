@@ -97,8 +97,8 @@ class Testing:
         
 
 
-# test = Testing([[1, 2], [1, 5], [2, 6], [2, 3], [4, 2], [3, 4], [6, 7], [5, 5], [5, 7]])
-test = Testing([[1, 2], [2, 4], [4, 5], [5, 2], [2, 3]])
+test = Testing([[1, 2], [1, 5], [2, 6], [2, 3], [4, 2], [3, 4], [6, 7], [5, 5], [5, 7]])
+#test = Testing([[1, 2], [2, 4], [4, 5], [5, 2], [2, 3]])
 test.get_relationship()
 test.find_paths()
 test.return_paths()
