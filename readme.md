@@ -1,31 +1,22 @@
-### Continue filling out the readme 
+### Continue filling out the readme
 
 Dependencies?
 
-
-
 Criteria for the Graph Coverage Criteria App:
 
-Relationship [Node, Edges]  
+Relationship [Node, Edges]
 
-How to represent that?  
+How to represent that?
 
-List of Lists --   
+List of Lists --
 
-Terminal Node   
-[Node, $]  
+Terminal Node  
+[Node, $]
 
-
-Initial Node  
-
-
-
-
-
-
+Initial Node
 
 Category Partition  
-1 Input: Type List  
+1 Input: Type List
 
 Empty List OR A List that meets the following criteria:
 
@@ -33,41 +24,35 @@ INIT: 0, 1, >1
 TERM: 0, 1, >1  
 LOOPS: None, Self, Circuit  
 EDGE: 0, >0  
-NODE: 1, >1  
+NODE: 1, >1
 
 Constraints:  
 If Edge = 0, Loop == None  
 If Node = 1, Term == 0 || Term == 1  
-If Node = 1, Init == 0 || Init == 1  
+If Node = 1, Init == 0 || Init == 1
 
 Lists:  
 ADD HERE  
-[Empty List] 1) => Error  
+[Empty List] 1) => Error --> Passed/Tested
 
-[I,T,L,E,N]    
+[I,T,L,E,N]
 
-[1,1,N,0,1]  2) [[INIT, N],[N, TERM]]  
+[1,1,N,0,1] 2) [[INIT, N],[N, TERM]] --> Passed/Tested
 
-[1,1,S,>0,1]  3) [[INIT, N],[N,N] [N, TERM]]  
+[1,1,S,>0,1] 3) [[INIT, N],[N,N] [N, TERM]] --> Passed/Tested
 
-[1,1,C,>0,>1] 4) [[INIT, N1],[N1,N2],[N2,N3],[N3,N4],[N4,N2],[N2, TERM]]  
+[1,1,C,>0,>1] 4) [[INIT, N1],[N1,N2],[N2,N3],[N3,N4],[N4,N2],[N2, TERM]] --> NotSure/Tested
 
-[0,0,S,>0,1]  5)[[N,N]] => Error  
+[0,0,S,>0,1] 5)[[N,N]] => Error --> Passed/Tested
 
-[1,1,C,>0,>1] 6)[[INIT, N1],[N1,N5],[N5,N5],[N5,N7],[N7,TERM]] - Duplicate  
+[1,1,C,>0,>1] 6)[[INIT, N1],[N1,N5],[N5,N5],[N5,N7],[N7,TERM]] - Duplicate
 
-#Kacy's part:
+[>1, 1, N, >0, >1] 7) [[INIT, N1], [N1, N3], [INIT, N2], [N2, N3], [N3, TERM]] --> Not Tested Yet
 
-[1,1,N,>0,>1] : [[INIT, N1], [N2, TERM]]
-[1,1,N,>0,>1] : [[INIT, N1], [N1, N2], [N3, TERM]] -> Error
-[>1,1,N,>0,>1] : [[INIT, N1], [INIT, N2], [N1, TERM]] (this is because N2 cant come to TERM)
-[1,0,S,>0,1] : [[INIT, N], [N, N]] (self-loop but without termination)
-[1,0,C,>0,>1]: [[INIT, N1], [N1, N2], [N2, N1]] -> Error (Cycle but without term
-[[INIT, N], [N, N]] -> Error (Infinite Self Loop)
-[[INIT, A], [A, B], [C, D], [D, C]] -> Error (It is so disconnected I would say and without term)
+[1, >1, N, >0, >1] 8) [[INIT, N1], [N1, N2], [N2, N4], [N1, N3], [N3, TERM], [N4, TERM]] --> Not Tested Yet
 
-[>1, 1, N, >0, >1]  7) [[INIT, N1], [N1, N3], [INIT, N2], [N2, N3], [N3, TERM]]  
+## How to test/run
 
-[1, >1, N, >0, >1]   8)  [[INIT, N1], [N1, N2], [N2, N4], [N1, N3], [N3, TERM], [N4, TERM]]
-
-
+1. Open terminal
+2. install pytest
+3. pytest tests.py
