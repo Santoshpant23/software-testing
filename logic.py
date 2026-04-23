@@ -49,7 +49,6 @@ def pc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
 def mcc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
     return [asg for asg, _ in pred.truth_table()]
 
-
 def cc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
     tt = pred.truth_table()
     clause_values: Set[Tuple[str, bool]] = set()
@@ -57,7 +56,7 @@ def cc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
         clause_values.add((c, True))
         clause_values.add((c, False))
 
-    coverage = []  
+    coverage = []  # list of (asg, covered set)
     for asg, _ in tt:
         covered = set((c, asg[c]) for c in pred.clauses)
         coverage.append((asg, covered))
@@ -73,7 +72,6 @@ def cc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
     return selected
 
 def gacc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
-    clauses = pred.clauses
     all_asgs = [dict(zip(clauses, bits)) for bits in itertools.product([False, True], repeat=len(clauses))]
     selected = []
     for major in clauses:
@@ -99,14 +97,92 @@ def gacc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
                 selected.append(a1)
     return selected
 
+def racc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
+    clauses = pred.clauses
+    all_asgs = [dict(zip(clauses, bits)) for bits in itertools.product([False, True], repeat=len(clauses))]
+    selected = []
+    for major in clauses:
+        found = None
+        for asg in all_asgs:
+            a0 = dict(asg)
+            a1 = dict(asg)
+            a0[major] = False
+            a1[major] = True
+            try:
+                v0 = pred.evaluate(a0)
+                v1 = pred.evaluate(a1)
+            except KeyError:
+                continue
+            if v0 is False and v1 is True:
+                found = (a0, a1)
+                break
+        if found:
+            a0, a1 = found
+            if a0 not in selected:
+                selected.append(a0)
+            if a1 not in selected:
+                selected.append(a1)
+    return selected
+
+
+def cacc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
+    clauses = pred.clauses
+    all_asgs = [dict(zip(clauses, bits)) for bits in itertools.product([False, True], repeat=len(clauses))]
+    selected = []
+    for major in clauses:
+        pair = None
+        for asg in all_asgs:
+            a0 = dict(asg)
+            a1 = dict(asg)
+            a0[major] = False
+            a1[major] = True
+            try:
+                v0 = pred.evaluate(a0)
+                v1 = pred.evaluate(a1)
+            except KeyError:
+                continue
+            if v0 != v1:
+                # require correlation: in at least one assignment decision == major value
+                if (v0 == a0[major]) or (v1 == a1[major]):
+                    pair = (a0, a1)
+                    break
+        if pair:
+            a0, a1 = pair
+            if a0 not in selected:
+                selected.append(a0)
+            if a1 not in selected:
+                selected.append(a1)
+    return selected
+
+
+def mcdc_tests(pred: LogicPredicate) -> List[Dict[str, bool]]:
+    clauses = pred.clauses
+    all_asgs = [dict(zip(clauses, bits)) for bits in itertools.product([False, True], repeat=len(clauses))]
+    selected = []
+    for major in clauses:
+        found = None
+        for asg in all_asgs:
+            a0 = dict(asg)
+            a1 = dict(asg)
+            a0[major] = False
+            a1[major] = True
+            try:
+                v0 = pred.evaluate(a0)
+                v1 = pred.evaluate(a1)
+            except KeyError:
+                continue
+            if v0 != v1:
+                found = (a0, a1)
+                break
+        if found:
+            a0, a1 = found
+            if a0 not in selected:
+                selected.append(a0)
+            if a1 not in selected:
+                selected.append(a1)
+    return selected
 
 class Testing:
-    Use like:
-      t = Testing('A && (B || !C)')
-      t.get_clauses()
-      t.find_tests()
-      t.return_tests()
-  
     def __init__(self, expr):
         self.expr = expr
         self.pred = None
@@ -114,6 +190,9 @@ class Testing:
         self.cc = []
         self.mcc = []
         self.gacc = []
+        self.cacc = []
+        self.racc = []
+        self.mcdc = []
         self.make_pred()
 
     def make_pred(self):
@@ -124,11 +203,14 @@ class Testing:
 
     def find_tests(self):
         if self.pc or self.cc or self.mcc or self.gacc:
-            return [self.pc, self.cc, self.mcc, self.gacc]
+            return [self.pc, self.cc, self.mcc, self.gacc, self.cacc, self.racc, self.mcdc]
         self.pc = pc_tests(self.pred)
         self.cc = cc_tests(self.pred)
         self.mcc = mcc_tests(self.pred)
         self.gacc = gacc_tests(self.pred)
+        self.cacc = cacc_tests(self.pred)
+        self.racc = racc_tests(self.pred)
+        self.mcdc = mcdc_tests(self.pred)
         return [self.pc, self.cc, self.mcc, self.gacc]
 
     def return_tests(self):
@@ -137,6 +219,9 @@ class Testing:
         print('CC tests:', self.cc)
         print('MCC count:', len(self.mcc))
         print('GACC tests:', self.gacc)
+        print('CACC tests:', self.cacc)
+        print('RACC tests:', self.racc)
+        print('MC/DC tests:', self.mcdc)
 
 
 if __name__ == '__main__':
@@ -144,3 +229,4 @@ if __name__ == '__main__':
     t.get_clauses()
     t.find_tests()
     t.return_tests()
+
